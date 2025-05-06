@@ -1,0 +1,42 @@
+---
+title: "R_Empirical_Analysis_1"
+output: html_document
+date: "2025-04-29"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+```{r}
+
+library(readtext)
+library(dplyr)
+library(stringr)
+
+setwd(choose.dir())
+
+setwd("C:/Users/YourName/OneDrive/Zsombor – Személyes/BAP - Computational IR/BAP Thesis/Data for BAP/LexisNexis_Economic Sentiment")
+
+
+library(officer)
+library(tidyverse)
+
+files <- list.files(pattern = "\\.docx$", full.names = TRUE)
+
+read_docx_text <- function(path) {
+  doc <- read_docx(path)
+  text <- docx_summary(doc) %>% 
+    filter(content_type == "paragraph") %>% 
+    pull(text)
+  paste(text, collapse = " ")
+}
+
+doc_data <- tibble(
+  filename = basename(files),
+  text = map_chr(files, read_docx_text)
+)
+
+print(doc_data)
+
+
+```
